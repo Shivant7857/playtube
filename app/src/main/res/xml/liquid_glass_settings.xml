@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:title="@string/liquid_glass_settings_title">
+
+    <SwitchPreferenceCompat
+        android:defaultValue="true"
+        android:key="@string/liquid_glass_enabled_key"
+        android:title="@string/liquid_glass_enabled_title"
+        app:singleLineTitle="false"
+        app:iconSpaceReserved="false" />
+
+    <SeekBarPreference
+        android:defaultValue="12"
+        android:key="@string/liquid_glass_blur_key"
+        android:max="40"
+        android:title="@string/liquid_glass_blur_title"
+        app:iconSpaceReserved="false"
+        app:min="0"
+        app:showSeekBarValue="true"
+        app:singleLineTitle="false"
+        app:updatesContinuously="true" />
+
+    <PreferenceCategory
+        android:title="@string/settings_category_glass_refraction_title"
+        app:iconSpaceReserved="false">
+        <SeekBarPreference
+            android:defaultValue="50"
+            android:key="@string/liquid_glass_edge_intensity_key"
+            android:max="100"
+            android:title="@string/liquid_glass_edge_intensity_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="80"
+            android:key="@string/liquid_glass_rim_intensity_key"
+            android:max="100"
+            android:title="@string/liquid_glass_rim_intensity_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="8"
+            android:key="@string/liquid_glass_edge_width_key"
+            android:max="40"
+            android:title="@string/liquid_glass_edge_width_title"
+            app:iconSpaceReserved="false"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="25"
+            android:key="@string/liquid_glass_rim_width_key"
+            android:max="60"
+            android:title="@string/liquid_glass_rim_width_title"
+            app:iconSpaceReserved="false"
+            app:min="1"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="20"
+            android:key="@string/liquid_glass_corner_key"
+            android:max="100"
+            android:title="@string/liquid_glass_corner_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="30"
+            android:key="@string/liquid_glass_ripple_key"
+            android:max="100"
+            android:title="@string/liquid_glass_ripple_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/settings_category_glass_surface_title"
+        app:iconSpaceReserved="false">
+        <SeekBarPreference
+            android:defaultValue="12"
+            android:key="@string/liquid_glass_blur_key"
+            android:max="40"
+            android:title="@string/liquid_glass_blur_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="25"
+            android:key="@string/liquid_glass_tint_key"
+            android:max="100"
+            android:title="@string/liquid_glass_tint_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="0"
+            android:key="@string/liquid_glass_radius_key"
+            android:max="60"
+            android:title="@string/liquid_glass_radius_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SeekBarPreference
+            android:defaultValue="15"
+            android:key="@string/liquid_glass_stroke_key"
+            android:max="40"
+            android:title="@string/liquid_glass_stroke_title"
+            app:iconSpaceReserved="false"
+            app:min="0"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:updatesContinuously="true" />
+
+        <SwitchPreferenceCompat
+            android:defaultValue="false"
+            android:key="@string/liquid_glass_warp_key"
+            android:title="@string/liquid_glass_warp_title"
+            app:singleLineTitle="false"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

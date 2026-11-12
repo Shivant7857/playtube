@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="action_downloads" type="id" />
+    <item name="action_notifications" type="id" />
+    <item name="detail_scroll_view" type="id" />
+    <item name="detail_related_recycler_view" type="id" />
+    <item name="detail_comments_card" type="id" />
+    <item name="detail_comments_container" type="id" />
+    <item name="detail_subscribe_button" type="id" />
+    <item name="detail_action_like" type="id" />
+    <item name="detail_action_share" type="id" />
+    <item name="detail_action_save" type="id" />
+    <item name="detail_action_background" type="id" />
+    <item name="detail_action_download" type="id" />
+</resources>

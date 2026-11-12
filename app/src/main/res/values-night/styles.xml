@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Opening Theme -->
+    <style name="Base.OpeningTheme" parent="Base.V21.OpeningTheme">
+        <item name="android:navigationBarColor">@color/playtube_splash_bg</item>
+        <item name="android:statusBarColor">@color/playtube_splash_bg</item>
+    </style>
+
+</resources>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="contrastColor">@color/black</color>
+    <color name="defaultIconTint">@color/black</color>
+
+    <color name="header_background_color">#FFFFFF</color>
+    <color name="header_text_color">#000000</color>
+
+    <color name="ic_launcher_background">#FFFFFF</color>
+
+    <color name="placeholder_background">#999999</color>
+    <color name="placeholder_foreground">#6C6C6C</color>
+
+    <!-- PlayTube Splash & Skeleton System -->
+    <color name="playtube_splash_bg">#FFFFFF</color>
+    <color name="playtube_loader_track">#D0D0D0</color>
+    <color name="playtube_loader_progress">#FF0000</color>
+    <color name="playtube_skeleton_base">#E5E5E5</color>
+    <color name="playtube_skeleton_shimmer">#F4F4F4</color>
+
+    <!-- Light Theme -->
+    <color name="light_background_color">#EEEEEE</color>
+    <color name="light_dialog_background_color">#EEEEEE</color>
+    <color name="light_settings_accent_color">#e53935</color>
+    <color name="light_separator_color">#32000000</color>
+    <color name="light_ripple_color">#48868686</color>
+    <color name="light_selected_color">#2a868686</color>
+    <color name="light_contrast_background_color">#1fa6a6a6</color>
+    <color name="light_shadow_start_color">#5a000000</color>
+    <color name="light_license_background_color">#ffffff</color>
+    <color name="light_license_text_color">#212121</color>
+    <color name="light_card_item_background_color">#F8F8F8</color>
+    <color name="light_card_item_contrast_color">#E9E9E9</color>
+    <color name="light_border_color">#33000000</color>
+
+    <!-- Dark Theme -->
+    <color name="dark_background_color">#000000</color>
+    <color name="dark_dialog_background_color">#424242</color>
+    <color name="dark_settings_accent_color">#ff5252</color>
+    <color name="dark_separator_color">#0affffff</color>
+    <color name="dark_ripple_color">#48ffffff</color>
+    <color name="dark_selected_color">#2affffff</color>
+    <color name="dark_contrast_background_color">#1f717171</color>
+    <color name="dark_shadow_start_color">#82000000</color>
+    <color name="dark_license_background_color">#424242</color>
+    <color name="dark_license_text_color">#ffffff</color>
+    <color name="dark_queue_background_color">#af000000</color>
+    <color name="dark_card_item_background_color">#000000</color>
+    <color name="dark_card_item_contrast_color">#474747</color>
+    <color name="dark_border_color">#33FFFFFF</color>
+
+    <!-- Black Theme -->
+    <color name="black_background_color">#000000</color>
+    <color name="black_settings_accent_color">@color/dark_settings_accent_color</color>
+    <color name="black_separator_color">#1effffff</color>
+    <color name="black_contrast_background_color">#23454545</color>
+    <color name="black_card_item_background_color">#0F0F0F</color>
+    <color name="black_card_item_contrast_color">#202020</color>
+    <color name="black_border_color">#25FFFFFF</color>
+
+    <!-- Liquid glass bar -->
+    <color name="light_glass_surface">#EBF2F3F5</color>
+    <color name="light_glass_stroke">#33000000</color>
+    <color name="light_glass_icon">#8A000000</color>
+    <color name="dark_glass_surface">#E6141518</color>
+    <color name="dark_glass_stroke">#2EFFFFFF</color>
+    <color name="dark_glass_icon">#B3FFFFFF</color>
+    <color name="black_glass_surface">#E6101010</color>
+    <color name="black_glass_stroke">#25FFFFFF</color>
+    <color name="black_glass_icon">#B3FFFFFF</color>
+    <color name="light_glass_indicator">#66E53935</color>
+    <color name="dark_glass_indicator">#4DFF5252</color>
+    <color name="black_glass_indicator">#4DFF5252</color>
+
+    <!-- Redesigned settings cards -->
+    <color name="light_settings_card">#F1F1F3</color>
+    <color name="light_settings_divider">#E0E0E4</color>
+    <color name="dark_settings_card">#1E1E20</color>
+    <color name="dark_settings_divider">#333337</color>
+    <color name="black_settings_card">#141414</color>
+    <color name="black_settings_divider">#26262A</color>
+
+    <!-- Home category chips -->
+    <color name="light_home_chip_bg">#E9E9E9</color>
+    <color name="light_home_chip_bg_selected">#0F0F0F</color>
+    <color name="light_home_chip_text">#0F0F0F</color>
+    <color name="light_home_chip_text_selected">#FFFFFF</color>
+    <color name="dark_home_chip_bg">#272727</color>
+    <color name="dark_home_chip_bg_selected">#F1F1F1</color>
+    <color name="dark_home_chip_text">#F1F1F1</color>
+    <color name="dark_home_chip_text_selected">#0F0F0F</color>
+
+    <!-- Miscellaneous -->
+    <color name="queue_background_color">@color/dark_queue_background_color</color>
+    <color name="drawer_header_font_color">#F2FFFFFF</color>
+    <color name="duration_background_color">#aa000000</color>
+    <color name="live_duration_background_color">#c8E53935</color>
+    <color name="playlist_stream_count_background_color">#e6000000</color>
+    <color name="duration_text_color">#EEFFFFFF</color>
+    <color name="video_overlay_color">#64000000</color>
+
+    <color name="subscribe_text_color">#fff</color>
+    <color name="subscribed_background_color">#d6d6d6</color>
+    <color name="subscribed_text_color">#717171</color>
+
+    <color name="transparent_background_color">#00000000</color>
+    <color name="selected_background_color">#96717171</color>
+
+    <!-- GigaGet theme -->
+    <color name="bluegray">#607D8B</color>
+
+    <!-- GigaGet download Theme colors -->
+    <color name="audio_left_to_load_color">#555555</color>
+    <color name="audio_already_load_color">#000000</color>
+    <color name="video_left_to_load_color">#CD5656</color>
+    <color name="video_already_load_color">#BC211D</color>
+    <color name="subtitle_left_to_load_color">#008ea4</color>
+    <color name="subtitle_already_load_color">#005a71</color>
+
+    <!-- GigaGet Component colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="white_secondary">#C9CACB</color>
+
+    <color name="gray">#616161</color>
+
+    <color name="black">#000</color>
+
+</resources>

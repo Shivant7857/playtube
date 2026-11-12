@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- declared first so that it stays behind the tab bar when the bar floats over it -->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <org.schabi.newpipe.views.LiquidGlassTabLayout
+        android:id="@+id/main_tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/tab_bar_glass"
+        app:tabPaddingStart="0dp"
+        app:tabPaddingEnd="0dp"
+        app:tabRippleColor="@android:color/transparent"
+        app:tabIconTint="@color/tab_pill_icon_tint"
+        app:tabTextColor="#8D8D92"
+        app:tabSelectedTextColor="#FF3D33"
+        app:tabIndicatorHeight="0dp"
+        app:tabIndicator="@null"
+        app:tabInlineLabel="false"
+        app:tabTextAppearance="@style/BottomNavTextAppearance"
+        app:tabGravity="fill"
+        app:tabMode="fixed"
+        app:tabMinWidth="0dp" />
+
+</RelativeLayout>

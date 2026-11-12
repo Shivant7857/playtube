@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="general_preferences"
+    android:title="@string/settings">
+
+    <PreferenceCategory
+        android:selectable="false"
+        app:iconSpaceReserved="false">
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.VideoAudioSettingsFragment"
+            android:icon="@drawable/ic_badge_video_audio"
+            android:title="@string/settings_category_video_audio_title"
+            app:iconSpaceReserved="false" />
+
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.DownloadSettingsFragment"
+            android:icon="@drawable/ic_badge_download"
+            android:title="@string/settings_category_downloads_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:selectable="false"
+        app:iconSpaceReserved="false">
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.AppearanceSettingsFragment"
+            android:icon="@drawable/ic_badge_appearance"
+            android:title="@string/settings_category_appearance_title"
+            app:iconSpaceReserved="false" />
+
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.HistorySettingsFragment"
+            android:icon="@drawable/ic_badge_history"
+            android:title="@string/settings_category_history_title"
+            app:iconSpaceReserved="false" />
+
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.ContentSettingsFragment"
+            android:icon="@drawable/ic_badge_content"
+            android:title="@string/content"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:selectable="false"
+        app:iconSpaceReserved="false">
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.NotificationsSettingsFragment"
+            android:icon="@drawable/ic_badge_notifications"
+            android:title="@string/notifications"
+            app:iconSpaceReserved="false" />
+
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.UpdateSettingsFragment"
+            android:icon="@drawable/ic_badge_updates"
+            android:key="update_pref_screen_key"
+            android:title="@string/settings_category_updates_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:selectable="false"
+        app:iconSpaceReserved="false">
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.BackupRestoreSettingsFragment"
+            android:icon="@drawable/ic_badge_backup_restore"
+            android:title="@string/settings_category_backup_restore_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:selectable="false"
+        app:iconSpaceReserved="false">
+        <PreferenceScreen
+            android:fragment="org.schabi.newpipe.settings.DebugSettingsFragment"
+            android:icon="@drawable/ic_badge_debug"
+            android:key="@string/debug_pref_screen_key"
+            android:title="@string/settings_category_debug_title"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:selectable="false"
+        android:title="@string/support_and_about"
+        app:iconSpaceReserved="false">
+        <Preference
+            android:icon="@drawable/ic_playtube_logo"
+            android:key="pref_app_info_key"
+            android:summary="Version 26.1 • by SHIVANT"
+            android:title="@string/app_name"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:icon="@drawable/ic_badge_donate"
+            android:key="@string/pref_donate_key"
+            android:summary="@string/donation_summary"
+            android:title="@string/donation_title"
+            app:iconSpaceReserved="false" />
+
+        <Preference
+            android:icon="@drawable/ic_badge_about"
+            android:key="@string/pref_about_key"
+            android:summary="@string/about_summary"
+            android:title="@string/tab_about"
+            app:iconSpaceReserved="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

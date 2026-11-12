@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="contrastColor">@color/white</color>
+    <color name="defaultIconTint">@color/white</color>
+
+    <color name="header_background_color">#000000</color>
+    <color name="header_text_color">#FFFFFF</color>
+
+    <!-- PlayTube Splash & Skeleton System -->
+    <color name="playtube_splash_bg">#000000</color>
+    <color name="playtube_loader_track">#2E2E2E</color>
+    <color name="playtube_loader_progress">#FF0000</color>
+    <color name="playtube_skeleton_base">#222222</color>
+    <color name="playtube_skeleton_shimmer">#333333</color>
+</resources>

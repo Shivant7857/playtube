@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Demo layout showing the crystal-clear water-droplet bottom nav bar.
+    The FrameLayout behind it holds the content that will be refracted.
+    The bar floats at the bottom with rounded margins.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Main content area — this is what the bar refracts -->
+    <FrameLayout
+        android:id="@+id/content_area"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Crystal-clear water-droplet bottom nav bar -->
+    <org.schabi.newpipe.views.LiquidGlassBottomNavBar
+        android:id="@+id/water_droplet_nav"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp" />
+
+</RelativeLayout>

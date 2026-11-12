@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.schabi.newpipe.views.FocusAwareCoordinator xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize" />
+
+    <include
+        android:id="@+id/toolbar_layout"
+        layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="4dp" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_player_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:elevation="20dp"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="0dp"
+        app:layout_behavior="org.schabi.newpipe.player.gesture.CustomBottomSheetBehavior" />
+
+    <!-- YouTube-style Shared Element Container Transform Overlay -->
+    <FrameLayout
+        android:id="@+id/video_transition_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="25dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:visibility="gone">
+
+        <!-- Background dimmer that fades in -->
+        <View
+            android:id="@+id/video_transition_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/black"
+            android:alpha="0" />
+
+        <!-- Transforming Card containing the Thumbnail -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/video_transition_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@android:color/black">
+
+            <ImageView
+                android:id="@+id/video_transition_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitCenter"
+                android:background="@android:color/black" />
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Skeleton content below transforming card -->
+        <LinearLayout
+            android:id="@+id/video_transition_skeleton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:alpha="0">
+
+            <!-- Title bar skeleton -->
+            <View
+                android:layout_width="260dp"
+                android:layout_height="18dp"
+                android:background="@drawable/bg_channel_pill"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Channel row skeleton -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="16dp">
+
+                <View
+                    android:layout_width="38dp"
+                    android:layout_height="38dp"
+                    android:background="@drawable/bg_channel_pill" />
+
+                <View
+                    android:layout_width="120dp"
+                    android:layout_height="14dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/bg_channel_pill" />
+            </LinearLayout>
+
+            <!-- Actions row skeleton -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:background="@drawable/bg_channel_pill" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- Opening Splash Overlay (Stage 1 & Stage 2) -->
+    <FrameLayout
+        android:id="@+id/splash_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/playtube_splash_bg"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="100dp"
+        android:visibility="gone">
+
+        <!-- Stage 1: Centered App Logo -->
+        <ImageView
+            android:id="@+id/splash_logo"
+            android:layout_width="110dp"
+            android:layout_height="76dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_playtube_splash_logo"
+            android:contentDescription="@string/app_name" />
+
+        <!-- Stage 2: Minimal Horizontal PlayTube Loader -->
+        <org.schabi.newpipe.views.PlayTubeLoadingBarView
+            android:id="@+id/splash_loader"
+            android:layout_width="180dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:alpha="0"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</org.schabi.newpipe.views.FocusAwareCoordinator>
