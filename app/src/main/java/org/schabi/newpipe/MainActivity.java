@@ -89,6 +89,10 @@ import org.schabi.newpipe.player.playqueue.PlayQueue;
 import org.schabi.newpipe.settings.SettingsActivity;
 import org.schabi.newpipe.settings.UpdateSettingsFragment;
 import org.schabi.newpipe.settings.migration.MigrationManager;
+import org.schabi.newpipe.update.PlayTubeUpdateWorker;
+import org.schabi.newpipe.update.UpdateActivity;
+import org.schabi.newpipe.update.UpdateInfo;
+import org.schabi.newpipe.update.UpdateManager;
 import org.schabi.newpipe.util.Constants;
 import org.schabi.newpipe.util.DeviceUtils;
 import org.schabi.newpipe.util.Localization;
@@ -222,6 +226,20 @@ public class MainActivity extends AppCompatActivity implements
             UpdateSettingsFragment.askForConsentToUpdateChecks(this);
         }
 
+        UpdateManager.INSTANCE.init(this);
+        if (UpdateManager.INSTANCE.isAutoCheckEnabled(this)) {
+            PlayTubeUpdateWorker.Companion.schedule(this);
+        }
+        final UpdateInfo cachedUpdate = UpdateManager.INSTANCE.getCachedUpdate();
+        if (cachedUpdate != null && cachedUpdate.isMandatory(BuildConfig.VERSION_CODE,
+                BuildConfig.VERSION_NAME)) {
+            final Intent updateIntent = new Intent(this, UpdateActivity.class);
+            updateIntent.putExtra(UpdateActivity.EXTRA_UPDATE_INFO, cachedUpdate);
+            updateIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(updateIntent);
+        }
+
         // ReleaseVersionUtil.INSTANCE.isReleaseApk() will be true only for main official build
         // We want every release build (nightly, nightly-refactor) to show the popup
         if (!DEBUG) {
@@ -310,6 +328,16 @@ public class MainActivity extends AppCompatActivity implements
         }
 
         updateNavigationState();
+
+        final UpdateInfo updateOnResume = UpdateManager.INSTANCE.getCachedUpdate();
+        if (updateOnResume != null && updateOnResume.isMandatory(BuildConfig.VERSION_CODE,
+                BuildConfig.VERSION_NAME)) {
+            final Intent updateIntent = new Intent(this, UpdateActivity.class);
+            updateIntent.putExtra(UpdateActivity.EXTRA_UPDATE_INFO, updateOnResume);
+            updateIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                    | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(updateIntent);
+        }
     }
 
     @Override

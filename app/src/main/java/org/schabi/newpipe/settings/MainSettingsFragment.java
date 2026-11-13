@@ -10,6 +10,8 @@ import androidx.preference.Preference;
 
 import org.schabi.newpipe.MainActivity;
 import org.schabi.newpipe.R;
+import org.schabi.newpipe.update.UpdateInfo;
+import org.schabi.newpipe.update.UpdateManager;
 import org.schabi.newpipe.util.NavigationHelper;
 import org.schabi.newpipe.util.ReleaseVersionUtil;
 import org.schabi.newpipe.util.external_communication.ShareUtils;
@@ -61,6 +63,28 @@ public class MainSettingsFragment extends BasePreferenceFragment {
                 NavigationHelper.openAbout(requireContext());
                 return true;
             });
+        }
+
+        updateSoftwareUpdateSummary();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateSoftwareUpdateSummary();
+    }
+
+    private void updateSoftwareUpdateSummary() {
+        final Preference updatePref =
+                findPreference(getString(R.string.update_pref_screen_key));
+        if (updatePref != null) {
+            final UpdateInfo cached = UpdateManager.INSTANCE.getCachedUpdate();
+            if (cached != null) {
+                final String vName = cached.getVersionName().replaceFirst("^[vV]", "");
+                updatePref.setSummary("Update available: v" + vName);
+            } else {
+                updatePref.setSummary(R.string.software_update_summary);
+            }
         }
     }
 

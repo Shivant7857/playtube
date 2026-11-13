@@ -1,0 +1,21 @@
+{
+  "versionName": "2.0.0",
+  "versionCode": 2000,
+  "channel": "stable",
+  "updateType": "major",
+  "mandatory": true,
+  "minSupportedVersionCode": 2000,
+  "publishedAt": "13 November 2026, 11:00 AM",
+  "apkAsset": "PlayTube-v2.0.0.apk",
+  "apkUrl": "https://github.com/Shivant7857/playtube/releases/download/v2.0.0/PlayTube-v2.0.0.apk",
+  "apkSize": 39912910,
+  "sha256": "3cb56c7ace89caf246011e95bc16810ff12517e88ec11ee0e8ce32037dfd1d6b",
+  "changelog": [
+    "Dedicated Software Update Center with GitHub auto-updates & in-app installation.",
+    "Fluid YouTube-style Shared Element Transition (Container Transform) on video tap.",
+    "Master Redesign: Near-fullscreen Video Description details sheet with pinned video player.",
+    "Master Redesign: Modern Comments overlay sheet with curved L-connector reply lines.",
+    "Mandatory Force Update system for seamless major release migration.",
+    "Pure AMOLED dark mode optimizations with zero battery drain."
+  ]
+}

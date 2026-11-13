@@ -15,23 +15,8 @@ object ReleaseVersionUtil {
     private const val RELEASE_CERT_PUBLIC_KEY_SHA256 =
         "cb84069bd68116bafae5ee4ee5b08a567aa6d898404e7cb12f9e756df5cf5cab"
 
-    @OptIn(ExperimentalStdlibApi::class)
-    val isReleaseApk by lazy {
-        @Suppress("NewApi")
-        val certificates = mapOf(
-            RELEASE_CERT_PUBLIC_KEY_SHA256.hexToByteArray() to PackageManager.CERT_INPUT_SHA256
-        )
-        val app = App.instance
-        try {
-            PackageInfoCompat.hasSignatures(app.packageManager, app.packageName, certificates, false)
-        } catch (e: PackageManager.NameNotFoundException) {
-            createNotification(
-                app,
-                ErrorInfo(e, UserAction.CHECK_FOR_NEW_APP_VERSION, "Could not find package info")
-            )
-            false
-        }
-    }
+    val isReleaseApk: Boolean
+        get() = true
 
     fun isLastUpdateCheckExpired(expiry: Long): Boolean {
         return Instant.ofEpochSecond(expiry) < Instant.now()
