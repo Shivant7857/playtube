@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 
 import org.schabi.newpipe.R;
 import org.schabi.newpipe.error.UserAction;
+import org.schabi.newpipe.extractor.InfoItem;
 import org.schabi.newpipe.extractor.ListExtractor;
 import org.schabi.newpipe.extractor.comments.CommentsInfo;
 import org.schabi.newpipe.extractor.comments.CommentsInfoItem;
@@ -20,6 +21,8 @@ import org.schabi.newpipe.fragments.list.BaseListInfoFragment;
 import org.schabi.newpipe.info_list.ItemViewMode;
 import org.schabi.newpipe.ktx.ViewUtils;
 import org.schabi.newpipe.util.ExtractorHelper;
+
+import java.util.List;
 
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -119,5 +122,56 @@ public class CommentsFragment extends BaseListInfoFragment<CommentsInfoItem, Com
 
         itemsList.scrollToPosition(position);
         return true;
+    }
+
+    public void sortByTop() {
+        if (infoListAdapter == null) {
+            return;
+        }
+        final List<InfoItem> list = infoListAdapter.getItemsList();
+        if (list != null && list.size() > 1) {
+            list.sort((a, b) -> {
+                final long countA = (a instanceof CommentsInfoItem)
+                        ? ((CommentsInfoItem) a).getLikeCount() : -1;
+                final long countB = (b instanceof CommentsInfoItem)
+                        ? ((CommentsInfoItem) b).getLikeCount() : -1;
+                return Long.compare(countB, countA);
+            });
+            infoListAdapter.notifyDataSetChanged();
+            if (itemsList != null) {
+                itemsList.scrollToPosition(0);
+            }
+        }
+    }
+
+    public void sortByNewest() {
+        if (infoListAdapter == null) {
+            return;
+        }
+        final List<InfoItem> list = infoListAdapter.getItemsList();
+        if (list != null && list.size() > 1) {
+            list.sort((a, b) -> {
+                if (a instanceof CommentsInfoItem && b instanceof CommentsInfoItem) {
+                    final var dateA = ((CommentsInfoItem) a).getUploadDate();
+                    final var dateB = ((CommentsInfoItem) b).getUploadDate();
+                    if (dateA != null && dateB != null
+                            && dateA.offsetDateTime() != null
+                            && dateB.offsetDateTime() != null) {
+                        return dateB.offsetDateTime().compareTo(dateA.offsetDateTime());
+                    }
+                    if (dateA != null && dateA.offsetDateTime() != null) {
+                        return -1;
+                    }
+                    if (dateB != null && dateB.offsetDateTime() != null) {
+                        return 1;
+                    }
+                }
+                return 0;
+            });
+            infoListAdapter.notifyDataSetChanged();
+            if (itemsList != null) {
+                itemsList.scrollToPosition(0);
+            }
+        }
     }
 }

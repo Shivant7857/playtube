@@ -3,6 +3,7 @@ package org.schabi.newpipe.info_list.holder;
 import static org.schabi.newpipe.util.ServiceHelper.getServiceById;
 import static org.schabi.newpipe.util.text.TouchUtils.getOffsetForHorizontalLine;
 
+import android.content.Context;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
@@ -10,12 +11,11 @@ import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.FragmentActivity;
 
 import org.schabi.newpipe.R;
@@ -30,6 +30,7 @@ import org.schabi.newpipe.util.external_communication.ShareUtils;
 import org.schabi.newpipe.util.image.CoilHelper;
 import org.schabi.newpipe.util.image.ImageStrategy;
 import org.schabi.newpipe.util.text.TextEllipsizer;
+import org.schabi.newpipe.views.CommentConnectorView;
 
 public class CommentInfoItemHolder extends InfoItemHolder {
 
@@ -37,7 +38,7 @@ public class CommentInfoItemHolder extends InfoItemHolder {
     private final int commentHorizontalPadding;
     private final int commentVerticalPadding;
 
-    private final RelativeLayout itemRoot;
+    private final View itemRoot;
     private final ImageView itemThumbnailView;
     private final TextView itemContentView;
     private final ImageView itemThumbsUpView;
@@ -45,7 +46,11 @@ public class CommentInfoItemHolder extends InfoItemHolder {
     private final TextView itemTitleView;
     private final ImageView itemHeartView;
     private final ImageView itemPinnedView;
-    private final Button repliesButton;
+    private final TextView repliesButton;
+    private final CommentConnectorView commentConnectorView;
+    private final View interactionRowContainer;
+    private final TextView repliesBullet;
+    private final ImageView itemOverflowMenu;
 
     @NonNull
     private final TextEllipsizer textEllipsizer;
@@ -63,6 +68,10 @@ public class CommentInfoItemHolder extends InfoItemHolder {
         itemHeartView = itemView.findViewById(R.id.detail_heart_image_view);
         itemPinnedView = itemView.findViewById(R.id.detail_pinned_view);
         repliesButton = itemView.findViewById(R.id.replies_button);
+        commentConnectorView = itemView.findViewById(R.id.comment_connector_view);
+        interactionRowContainer = itemView.findViewById(R.id.interaction_row_container);
+        repliesBullet = itemView.findViewById(R.id.replies_bullet);
+        itemOverflowMenu = itemView.findViewById(R.id.itemOverflowMenu);
 
         commentHorizontalPadding = (int) infoItemBuilder.getContext()
                 .getResources().getDimension(R.dimen.comments_horizontal_padding);
@@ -110,18 +119,54 @@ public class CommentInfoItemHolder extends InfoItemHolder {
                         item.getTextualUploadDate())));
 
         // setup bottom row, with likes, heart and replies button
-        itemLikesCountView.setText(
-                Localization.likeCount(itemBuilder.getContext(), item.getLikeCount()));
+        if (item.getLikeCount() > 0) {
+            itemLikesCountView.setVisibility(View.VISIBLE);
+            itemLikesCountView.setText(
+                    Localization.likeCount(itemBuilder.getContext(), item.getLikeCount()));
+        } else {
+            itemLikesCountView.setVisibility(View.GONE);
+        }
 
         itemHeartView.setVisibility(item.isHeartedByUploader() ? View.VISIBLE : View.GONE);
 
-        final boolean hasReplies = item.getReplies() != null;
+        final boolean hasReplies = item.getReplies() != null && item.getReplyCount() > 0;
         repliesButton.setOnClickListener(hasReplies ? v -> openCommentReplies(item) : null);
         repliesButton.setVisibility(hasReplies ? View.VISIBLE : View.GONE);
+        if (commentConnectorView != null) {
+            commentConnectorView.setVisibility(hasReplies ? View.VISIBLE : View.GONE);
+        }
+        if (repliesBullet != null) {
+            repliesBullet.setVisibility(hasReplies ? View.VISIBLE : View.GONE);
+        }
+        if (interactionRowContainer != null) {
+            interactionRowContainer.setPadding(hasReplies ? 0
+                    : DeviceUtils.dpToPx(44, itemBuilder.getContext()), 0, 0, 0);
+        }
         repliesButton.setText(hasReplies
                 ? Localization.replyCount(itemBuilder.getContext(), item.getReplyCount()) : "");
-        ((RelativeLayout.LayoutParams) itemThumbsUpView.getLayoutParams()).topMargin =
-                hasReplies ? 0 : DeviceUtils.dpToPx(6, itemBuilder.getContext());
+
+        if (itemOverflowMenu != null) {
+            itemOverflowMenu.setOnClickListener(v -> {
+                final Context context = itemBuilder.getContext();
+                final PopupMenu popup = new PopupMenu(context, itemOverflowMenu);
+                popup.getMenu().add(0, 1, 0, R.string.share);
+                popup.getMenu().add(0, 2, 1, R.string.copy_text);
+                popup.setOnMenuItemClickListener(menuItem -> {
+                    if (menuItem.getItemId() == 1) {
+                        ShareUtils.shareText(context, item.getUploaderName(), item.getUrl());
+                        return true;
+                    } else if (menuItem.getItemId() == 2) {
+                        final CharSequence text = itemContentView.getText();
+                        if (text != null) {
+                            ShareUtils.copyToClipboard(context, text.toString());
+                        }
+                        return true;
+                    }
+                    return false;
+                });
+                popup.show();
+            });
+        }
 
 
         // setup comment content and click listeners to expand/ellipsize it

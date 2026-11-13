@@ -587,6 +587,538 @@
 
         </androidx.core.widget.NestedScrollView>
 
+        <!-- OVERLAY: VIDEO DESCRIPTION DETAILS PAGE -->
+        <FrameLayout
+            android:id="@+id/detail_description_overlay_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <!-- Dim backdrop -->
+            <View
+                android:id="@+id/detail_description_overlay_dim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#99000000" />
+
+            <!-- Description Sheet Content -->
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/detail_description_overlay_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_sheet_top_rounded"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="48dp">
+
+                    <!-- Drag handle -->
+                    <View
+                        android:layout_width="38dp"
+                        android:layout_height="4dp"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="8dp"
+                        android:background="@drawable/bg_drag_handle" />
+
+                    <!-- Title + Close Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="12dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp">
+
+                        <org.schabi.newpipe.views.NewPipeTextView
+                            android:id="@+id/detail_overlay_full_title"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/white"
+                            android:textSize="15.5sp"
+                            android:textStyle="bold"
+                            android:lineSpacingExtra="2dp"
+                            tools:text="Battle Through The Heavens Season 7 Part 283 Explained in Hindi | Btth Season 5 Episode 219 hindi" />
+
+                        <ImageView
+                            android:id="@+id/detail_overlay_close_button"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="12dp"
+                            android:padding="4dp"
+                            android:src="@drawable/ic_close"
+                            android:contentDescription="@string/close"
+                            app:tint="@android:color/white"
+                            android:background="?attr/selectableItemBackgroundBorderless" />
+                    </LinearLayout>
+
+                    <!-- Channel Row: Avatar + Name + Videos Pill + About Pill -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="14dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/detail_overlay_channel_avatar"
+                            android:layout_width="34dp"
+                            android:layout_height="34dp"
+                            android:src="@drawable/placeholder_person"
+                            app:shapeAppearance="@style/CircularImageView"
+                            android:contentDescription="@string/detail_uploader_thumbnail_view_description" />
+
+                        <org.schabi.newpipe.views.NewPipeTextView
+                            android:id="@+id/detail_overlay_channel_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:textColor="@android:color/white"
+                            android:textSize="13.5sp"
+                            android:textStyle="bold"
+                            android:singleLine="true"
+                            tools:text="Cute Love Fairy Land" />
+
+                        <Space
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="1" />
+
+                        <!-- Videos Pill Button -->
+                        <LinearLayout
+                            android:id="@+id/detail_overlay_pill_videos"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_sheet_pill"
+                            android:gravity="center_vertical"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="12dp"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_play_arrow"
+                                app:tint="@android:color/white"
+                                tools:ignore="ContentDescription" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="@string/channel_tab_videos"
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <!-- About Pill Button -->
+                        <LinearLayout
+                            android:id="@+id/detail_overlay_pill_about"
+                            android:layout_width="wrap_content"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="8dp"
+                            android:background="@drawable/bg_sheet_pill"
+                            android:gravity="center_vertical"
+                            android:paddingStart="10dp"
+                            android:paddingEnd="12dp"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:src="@drawable/ic_info_outline"
+                                app:tint="@android:color/white"
+                                tools:ignore="ContentDescription" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:text="@string/channel_tab_about"
+                                android:textColor="@android:color/white"
+                                android:textSize="12sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- 3-Column Video Statistics Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <!-- Likes Column -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:id="@+id/detail_overlay_stat_likes"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="685" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/likes"
+                                android:textColor="#AAAAAA"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="26dp"
+                            android:background="#333333" />
+
+                        <!-- Views Column -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:id="@+id/detail_overlay_stat_views"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="2K" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/views"
+                                android:textColor="#AAAAAA"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="26dp"
+                            android:background="#333333" />
+
+                        <!-- Ago Column -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:id="@+id/detail_overlay_stat_ago"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@android:color/white"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                tools:text="1h" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/ago"
+                                android:textColor="#AAAAAA"
+                                android:textSize="11.5sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Video Description Card -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/bg_sheet_description_card"
+                        android:padding="14dp"
+                        android:orientation="vertical">
+
+                        <org.schabi.newpipe.views.NewPipeTextView
+                            android:id="@+id/detail_overlay_description_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:lineSpacingExtra="3.5dp"
+                            android:textColor="#DDDDDD"
+                            android:textColorLink="#3EA6FF"
+                            android:textSize="12.5sp"
+                            tools:text="Full description text with disclaimers..." />
+                    </LinearLayout>
+
+                    <!-- Video details Section -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="22dp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:orientation="vertical">
+
+                        <org.schabi.newpipe.views.NewPipeTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/video_details"
+                            android:textColor="@android:color/white"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <!-- Row 1: Date -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_calendar_today"
+                                app:tint="#AAAAAA"
+                                tools:ignore="ContentDescription" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="@string/date"
+                                android:textColor="#AAAAAA"
+                                android:textSize="13sp" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:id="@+id/detail_overlay_date_value"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                tools:text="11 Nov 2026" />
+                        </LinearLayout>
+
+                        <!-- Row 2: Views -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_play_arrow"
+                                app:tint="#AAAAAA"
+                                tools:ignore="ContentDescription" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="@string/views"
+                                android:textColor="#AAAAAA"
+                                android:textSize="13sp" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:id="@+id/detail_overlay_views_value"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                tools:text="2,043" />
+                        </LinearLayout>
+
+                        <!-- Row 3: Likes -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="14dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:src="@drawable/ic_thumb_up"
+                                app:tint="#AAAAAA"
+                                tools:ignore="ContentDescription" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:text="@string/likes"
+                                android:textColor="#AAAAAA"
+                                android:textSize="13sp" />
+
+                            <org.schabi.newpipe.views.NewPipeTextView
+                                android:id="@+id/detail_overlay_likes_value"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="end"
+                                android:textColor="@android:color/white"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                tools:text="685" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
+
+        <!-- OVERLAY: COMMENTS PAGE -->
+        <FrameLayout
+            android:id="@+id/detail_comments_overlay_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <!-- Dim backdrop -->
+            <View
+                android:id="@+id/detail_comments_overlay_dim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#99000000" />
+
+            <!-- Comments Sheet Content -->
+            <LinearLayout
+                android:id="@+id/detail_comments_overlay_sheet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_sheet_top_rounded"
+                android:orientation="vertical">
+
+                <!-- Drag handle -->
+                <View
+                    android:layout_width="38dp"
+                    android:layout_height="4dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_drag_handle" />
+
+                <!-- Header: "Comments" + Close X -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp">
+
+                    <org.schabi.newpipe.views.NewPipeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/comments_tab_title"
+                        android:textColor="@android:color/white"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/detail_comments_overlay_close_button"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:padding="4dp"
+                        android:src="@drawable/ic_close"
+                        android:contentDescription="@string/close"
+                        app:tint="@android:color/white"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#1F1F1F" />
+
+                <!-- Filter Chips: Top / Newest -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp">
+
+                    <org.schabi.newpipe.views.NewPipeTextView
+                        android:id="@+id/detail_comments_filter_top"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:background="@drawable/bg_filter_chip_selected"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="@string/filter_top"
+                        android:textColor="@android:color/black"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                    <org.schabi.newpipe.views.NewPipeTextView
+                        android:id="@+id/detail_comments_filter_newest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="28dp"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/bg_filter_chip_unselected"
+                        android:gravity="center"
+                        android:paddingStart="14dp"
+                        android:paddingEnd="14dp"
+                        android:text="@string/filter_newest"
+                        android:textColor="@android:color/white"
+                        android:textSize="12.5sp"
+                        android:textStyle="bold"
+                        android:clickable="true"
+                        android:focusable="true" />
+                </LinearLayout>
+
+                <!-- Fragment container for CommentsFragment -->
+                <FrameLayout
+                    android:id="@+id/detail_comments_overlay_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </FrameLayout>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <!-- OVERLAY LAYOUT FOR MINI PLAYER -->

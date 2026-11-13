@@ -4,7 +4,6 @@ import static android.text.TextUtils.isEmpty;
 import static org.schabi.newpipe.extractor.StreamingService.ServiceInfo.MediaCapability.COMMENTS;
 import static org.schabi.newpipe.extractor.stream.StreamExtractor.NO_AGE_LIMIT;
 import static org.schabi.newpipe.ktx.ViewUtils.animate;
-import static org.schabi.newpipe.ktx.ViewUtils.animateRotation;
 import static org.schabi.newpipe.player.helper.PlayerHelper.globalScreenOrientationLocked;
 import static org.schabi.newpipe.player.helper.PlayerHelper.isClearingQueueConfirmationRequired;
 import static org.schabi.newpipe.util.DependentPreferenceHelper.getResumePlaybackEnabled;
@@ -37,6 +36,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
@@ -248,6 +248,9 @@ public final class VideoDetailFragment
     private InfoListAdapter infoListAdapter;
     private boolean isDescriptionExpanded = false;
     private boolean isCommentsExpanded = false;
+    private boolean isDescriptionOverlayOpen = false;
+    private boolean isCommentsOverlayOpen = false;
+    private CommentsFragment commentsOverlayFragment;
     private boolean isLiked = false;
     private boolean isSaved = false;
 
@@ -480,11 +483,51 @@ public final class VideoDetailFragment
     //////////////////////////////////////////////////////////////////////////*/
 
     private void setOnClickListeners() {
-        final View.OnClickListener descriptionToggleListener = v -> toggleDescription();
-        binding.detailTitleRootLayout.setOnClickListener(descriptionToggleListener);
-        binding.detailMetadataRootLayout.setOnClickListener(descriptionToggleListener);
-        binding.detailMetadataMore.setOnClickListener(descriptionToggleListener);
-        binding.detailDescriptionCollapseButton.setOnClickListener(descriptionToggleListener);
+        final View.OnClickListener descriptionOpenListener = v -> openDescriptionOverlay();
+        binding.detailTitleRootLayout.setOnClickListener(descriptionOpenListener);
+        binding.detailMetadataRootLayout.setOnClickListener(descriptionOpenListener);
+        binding.detailMetadataMore.setOnClickListener(descriptionOpenListener);
+        binding.detailDescriptionCollapseButton.setOnClickListener(v -> closeDescriptionOverlay());
+
+        binding.detailOverlayCloseButton.setOnClickListener(v -> closeDescriptionOverlay());
+        binding.detailDescriptionOverlayDim.setOnClickListener(v -> closeDescriptionOverlay());
+
+        binding.detailOverlayPillVideos.setOnClickListener(v -> {
+            if (currentInfo != null && !isEmpty(currentInfo.getUploaderUrl())) {
+                openChannel(currentInfo.getUploaderUrl(), currentInfo.getUploaderName());
+            }
+        });
+        binding.detailOverlayPillAbout.setOnClickListener(v -> {
+            if (currentInfo != null && !isEmpty(currentInfo.getUploaderUrl())) {
+                openChannel(currentInfo.getUploaderUrl(), currentInfo.getUploaderName());
+            }
+        });
+        binding.detailOverlayChannelAvatar.setOnClickListener(v -> {
+            if (currentInfo != null && !isEmpty(currentInfo.getUploaderUrl())) {
+                openChannel(currentInfo.getUploaderUrl(), currentInfo.getUploaderName());
+            }
+        });
+        binding.detailOverlayChannelName.setOnClickListener(v -> {
+            if (currentInfo != null && !isEmpty(currentInfo.getUploaderUrl())) {
+                openChannel(currentInfo.getUploaderUrl(), currentInfo.getUploaderName());
+            }
+        });
+
+        binding.detailCommentsCard.setOnClickListener(v -> openCommentsOverlay());
+        binding.detailCommentsOverlayCloseButton.setOnClickListener(v -> closeCommentsOverlay());
+        binding.detailCommentsOverlayDim.setOnClickListener(v -> closeCommentsOverlay());
+        binding.detailCommentsFilterTop.setOnClickListener(v -> {
+            updateCommentFilterChips(true);
+            if (commentsOverlayFragment != null) {
+                commentsOverlayFragment.sortByTop();
+            }
+        });
+        binding.detailCommentsFilterNewest.setOnClickListener(v -> {
+            updateCommentFilterChips(false);
+            if (commentsOverlayFragment != null) {
+                commentsOverlayFragment.sortByNewest();
+            }
+        });
 
         final View.OnClickListener channelClickListener = makeOnClickListener(info -> {
             if (!isEmpty(info.getUploaderUrl())) {
@@ -559,7 +602,6 @@ public final class VideoDetailFragment
         binding.detailActionShare.setOnClickListener(shareListener);
 
         binding.detailActionLike.setOnClickListener(v -> toggleLike());
-        binding.detailCommentsCard.setOnClickListener(v -> toggleComments());
 
         final View.OnClickListener overlayListener = v -> bottomSheetBehavior
                 .setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -627,35 +669,198 @@ public final class VideoDetailFragment
         }
     }
 
-    private void toggleDescription() {
+    private void openDescriptionOverlay() {
+        if (binding == null || currentInfo == null || isDescriptionOverlayOpen) {
+            return;
+        }
+        if (isCommentsOverlayOpen) {
+            closeCommentsOverlay();
+        }
+
+        binding.detailOverlayFullTitle.setText(currentInfo.getName());
+        CoilHelper.INSTANCE.loadAvatar(binding.detailOverlayChannelAvatar,
+                currentInfo.getUploaderAvatars());
+        final String rawUploader = currentInfo.getUploaderName();
+        final String uploader = (!isEmpty(rawUploader) && rawUploader.startsWith("@"))
+                ? rawUploader.substring(1) : (rawUploader != null ? rawUploader : "");
+        binding.detailOverlayChannelName.setText(uploader);
+
+        if (currentInfo.getLikeCount() >= 0) {
+            binding.detailOverlayStatLikes.setText(
+                    Localization.shortCount(activity, currentInfo.getLikeCount()));
+        } else {
+            binding.detailOverlayStatLikes.setText("-");
+        }
+
+        if (currentInfo.getViewCount() >= 0) {
+            binding.detailOverlayStatViews.setText(
+                    Localization.shortCount(activity, currentInfo.getViewCount()));
+        } else {
+            binding.detailOverlayStatViews.setText("-");
+        }
+
+        String uploadAgo = Localization.relativeTimeOrTextual(
+                activity, currentInfo.getUploadDate(), currentInfo.getTextualUploadDate());
+        if (!isEmpty(uploadAgo) && uploadAgo.toLowerCase().endsWith(" ago")) {
+            uploadAgo = uploadAgo.substring(0, uploadAgo.length() - 4).trim();
+        }
+        binding.detailOverlayStatAgo.setText(!isEmpty(uploadAgo) ? uploadAgo : "-");
+
+        if (currentInfo.getDescription() != null) {
+            TextLinkifier.fromDescription(binding.detailOverlayDescriptionText,
+                    currentInfo.getDescription(), HtmlCompat.FROM_HTML_MODE_LEGACY,
+                    currentInfo.getService(), currentInfo.getUrl(), disposables,
+                    SET_LINK_MOVEMENT_METHOD);
+        } else {
+            binding.detailOverlayDescriptionText.setText("");
+        }
+
+        if (currentInfo.getUploadDate() != null
+                && currentInfo.getUploadDate().offsetDateTime() != null) {
+            binding.detailOverlayDateValue.setText(
+                    Localization.formatDate(currentInfo.getUploadDate().offsetDateTime()));
+        } else if (!isEmpty(currentInfo.getTextualUploadDate())) {
+            binding.detailOverlayDateValue.setText(currentInfo.getTextualUploadDate());
+        } else {
+            binding.detailOverlayDateValue.setText("-");
+        }
+
+        if (currentInfo.getViewCount() >= 0) {
+            binding.detailOverlayViewsValue.setText(
+                    Localization.localizeNumber(currentInfo.getViewCount()));
+        } else {
+            binding.detailOverlayViewsValue.setText("-");
+        }
+
+        if (currentInfo.getLikeCount() >= 0) {
+            binding.detailOverlayLikesValue.setText(
+                    Localization.localizeNumber(currentInfo.getLikeCount()));
+        } else {
+            binding.detailOverlayLikesValue.setText("-");
+        }
+
+        binding.detailScrollView.setNestedScrollingEnabled(false);
+
+        isDescriptionOverlayOpen = true;
+        binding.detailDescriptionOverlayContainer.setVisibility(View.VISIBLE);
+        binding.detailDescriptionOverlayDim.setAlpha(0f);
+        binding.detailDescriptionOverlayDim.animate().alpha(1f).setDuration(220).start();
+
+        binding.detailDescriptionOverlayScroll.post(() -> {
+            if (binding == null) {
+                return;
+            }
+            final float height = binding.detailDescriptionOverlayScroll.getHeight() > 0
+                    ? binding.detailDescriptionOverlayScroll.getHeight() : 1200f;
+            binding.detailDescriptionOverlayScroll.setTranslationY(height);
+            binding.detailDescriptionOverlayScroll.animate()
+                    .translationY(0f)
+                    .setDuration(280)
+                    .setInterpolator(new DecelerateInterpolator(1.8f))
+                    .start();
+        });
+    }
+
+    public void closeDescriptionOverlay() {
+        if (binding == null || !isDescriptionOverlayOpen) {
+            return;
+        }
+        isDescriptionOverlayOpen = false;
+        binding.detailDescriptionOverlayDim.animate().alpha(0f).setDuration(200).start();
+        final float height = binding.detailDescriptionOverlayScroll.getHeight() > 0
+                ? binding.detailDescriptionOverlayScroll.getHeight() : 1200f;
+        binding.detailDescriptionOverlayScroll.animate()
+                .translationY(height)
+                .setDuration(220)
+                .setInterpolator(new AccelerateInterpolator(1.5f))
+                .withEndAction(() -> {
+                    if (binding != null) {
+                        binding.detailDescriptionOverlayContainer.setVisibility(View.GONE);
+                        binding.detailScrollView.setNestedScrollingEnabled(true);
+                    }
+                })
+                .start();
+    }
+
+    private void openCommentsOverlay() {
+        if (binding == null || currentInfo == null || isCommentsOverlayOpen) {
+            return;
+        }
+        if (isDescriptionOverlayOpen) {
+            closeDescriptionOverlay();
+        }
+
+        if (commentsOverlayFragment == null) {
+            commentsOverlayFragment = CommentsFragment.getInstance(
+                    currentInfo.getServiceId(), currentInfo.getUrl(), currentInfo.getName());
+            getChildFragmentManager().beginTransaction()
+                    .replace(R.id.detail_comments_overlay_content, commentsOverlayFragment)
+                    .commitAllowingStateLoss();
+        }
+
+        updateCommentFilterChips(true);
+
+        binding.detailScrollView.setNestedScrollingEnabled(false);
+
+        isCommentsOverlayOpen = true;
+        binding.detailCommentsOverlayContainer.setVisibility(View.VISIBLE);
+        binding.detailCommentsOverlayDim.setAlpha(0f);
+        binding.detailCommentsOverlayDim.animate().alpha(1f).setDuration(220).start();
+
+        binding.detailCommentsOverlaySheet.post(() -> {
+            if (binding == null) {
+                return;
+            }
+            final float height = binding.detailCommentsOverlaySheet.getHeight() > 0
+                    ? binding.detailCommentsOverlaySheet.getHeight() : 1200f;
+            binding.detailCommentsOverlaySheet.setTranslationY(height);
+            binding.detailCommentsOverlaySheet.animate()
+                    .translationY(0f)
+                    .setDuration(280)
+                    .setInterpolator(new DecelerateInterpolator(1.8f))
+                    .start();
+        });
+    }
+
+    public void closeCommentsOverlay() {
+        if (binding == null || !isCommentsOverlayOpen) {
+            return;
+        }
+        isCommentsOverlayOpen = false;
+        binding.detailCommentsOverlayDim.animate().alpha(0f).setDuration(200).start();
+        final float height = binding.detailCommentsOverlaySheet.getHeight() > 0
+                ? binding.detailCommentsOverlaySheet.getHeight() : 1200f;
+        binding.detailCommentsOverlaySheet.animate()
+                .translationY(height)
+                .setDuration(220)
+                .setInterpolator(new AccelerateInterpolator(1.5f))
+                .withEndAction(() -> {
+                    if (binding != null) {
+                        binding.detailCommentsOverlayContainer.setVisibility(View.GONE);
+                        binding.detailScrollView.setNestedScrollingEnabled(true);
+                    }
+                })
+                .start();
+    }
+
+    private void updateCommentFilterChips(final boolean isTopSelected) {
         if (binding == null) {
             return;
         }
-        isDescriptionExpanded = !isDescriptionExpanded;
-        binding.detailDescriptionContainer.setVisibility(
-                isDescriptionExpanded ? View.VISIBLE : View.GONE);
-        animateRotation(binding.detailToggleSecondaryControlsView,
-                VideoPlayerUi.DEFAULT_CONTROLS_DURATION, isDescriptionExpanded ? 180 : 0);
-        binding.detailMetadataMore.setText(
-                isDescriptionExpanded ? R.string.show_less : R.string.more);
-    }
-
-    private void toggleComments() {
-        if (binding == null || currentInfo == null) {
-            return;
-        }
-        isCommentsExpanded = !isCommentsExpanded;
-        binding.detailCommentsContainer.setVisibility(
-                isCommentsExpanded ? View.VISIBLE : View.GONE);
-        if (isCommentsExpanded) {
-            Fragment fragment = getChildFragmentManager()
-                    .findFragmentById(R.id.detail_comments_container);
-            if (fragment == null) {
-                fragment = CommentsFragment.getInstance(serviceId, url, title);
-                getChildFragmentManager().beginTransaction()
-                        .replace(R.id.detail_comments_container, fragment)
-                        .commitAllowingStateLoss();
-            }
+        if (isTopSelected) {
+            binding.detailCommentsFilterTop.setBackgroundResource(
+                    R.drawable.bg_filter_chip_selected);
+            binding.detailCommentsFilterTop.setTextColor(Color.BLACK);
+            binding.detailCommentsFilterNewest.setBackgroundResource(
+                    R.drawable.bg_filter_chip_unselected);
+            binding.detailCommentsFilterNewest.setTextColor(Color.WHITE);
+        } else {
+            binding.detailCommentsFilterNewest.setBackgroundResource(
+                    R.drawable.bg_filter_chip_selected);
+            binding.detailCommentsFilterNewest.setTextColor(Color.BLACK);
+            binding.detailCommentsFilterTop.setBackgroundResource(
+                    R.drawable.bg_filter_chip_unselected);
+            binding.detailCommentsFilterTop.setTextColor(Color.WHITE);
         }
     }
 
@@ -909,6 +1114,15 @@ public final class VideoDetailFragment
     public boolean onBackPressed() {
         if (DEBUG) {
             Log.d(TAG, "onBackPressed() called");
+        }
+
+        if (isDescriptionOverlayOpen) {
+            closeDescriptionOverlay();
+            return true;
+        }
+        if (isCommentsOverlayOpen) {
+            closeCommentsOverlay();
+            return true;
         }
 
         // If we are in fullscreen mode just exit from it via first back press
@@ -1508,6 +1722,9 @@ public final class VideoDetailFragment
         this.url = newUrl;
         this.title = newTitle;
         this.playQueue = newPlayQueue;
+        this.commentsOverlayFragment = null;
+        this.isDescriptionOverlayOpen = false;
+        this.isCommentsOverlayOpen = false;
     }
 
     private void setErrorImage(final int imageResource) {
@@ -1671,6 +1888,14 @@ public final class VideoDetailFragment
         binding.detailDescriptionContainer.setVisibility(View.GONE);
         binding.detailToggleSecondaryControlsView.setRotation(0);
         binding.detailMetadataMore.setText(R.string.more);
+        isDescriptionOverlayOpen = false;
+        if (binding.detailDescriptionOverlayContainer != null) {
+            binding.detailDescriptionOverlayContainer.setVisibility(View.GONE);
+        }
+        isCommentsOverlayOpen = false;
+        if (binding.detailCommentsOverlayContainer != null) {
+            binding.detailCommentsOverlayContainer.setVisibility(View.GONE);
+        }
 
         final String detailAvatarUrl =
                 ImageStrategy.choosePreferredImage(info.getUploaderAvatars());
